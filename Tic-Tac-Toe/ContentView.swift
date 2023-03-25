@@ -43,9 +43,8 @@ struct ContentView: View {
                         
 //                        l'humain joue
                         moves[i] = Move(player: .human, boardIndex: i)
-                        isGameBoardDisabled = true
-//                        check for win condition or draw
                         
+//                        check for win condition or draw
                         if checkWinCondition(for: .human, in: moves){
                             alertItem = AlertContext.humanWin
                             return
@@ -54,7 +53,7 @@ struct ContentView: View {
                             alertItem = AlertContext.draw
                             return
                         }
-                        
+                        isGameBoardDisabled = true
 //                        l'odinateur joue
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
                             let computerPosition = determineComputerMovePosition(in: moves)
