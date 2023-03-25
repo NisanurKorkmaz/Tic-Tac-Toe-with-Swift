@@ -15,7 +15,7 @@ struct ContentView: View {
     
     @State private var moves : [Move?] = Array(repeating: nil, count: 9)
     @State private var isGameBoardDisabled = false
-    
+    @State private var alertItem : AlertItem?
     
     var body: some View {
         GeometryReader{ geometry in
@@ -47,11 +47,11 @@ struct ContentView: View {
 //                        check for win condition or draw
                         
                         if checkWinCondition(for: .human, in: moves){
-                            print("Human wins")
+                            alertItem = AlertContext.humanWin
                             return
                         }
                         if checkForDraw(in: moves){
-                            print("draw")
+                            alertItem = AlertContext.draw
                             return
                         }
                         
@@ -63,11 +63,11 @@ struct ContentView: View {
                             
                             //                          check for win condition or draw
                             if checkWinCondition(for: .computer, in: moves){
-                                print("Computer wins")
+                                alertItem = AlertContext.computerWin
                                 return
                             }
                             if checkForDraw(in: moves){
-                                print("draw")
+                                alertItem = AlertContext.draw
                                 return
                             }
                         }
@@ -79,6 +79,12 @@ struct ContentView: View {
         }
         .disabled(isGameBoardDisabled)
         .padding()
+        .alert(item: $alertItem, content: { alertItem in
+            Alert(title: alertItem.title,
+                  message: alertItem.message,
+                  dismissButton: .default(alertItem.butonTitle, action: {resetGame() }))
+            
+        })
         }
     }
     
@@ -112,6 +118,10 @@ struct ContentView: View {
     func checkForDraw(in moves : [Move?]) -> Bool{
         return moves.compactMap { $0 }.count == 9
     }
+    
+    func resetGame() {
+        moves = Array(repeating: nil, count: 9)
+    }
 }
 
 enum Player{
@@ -132,3 +142,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
